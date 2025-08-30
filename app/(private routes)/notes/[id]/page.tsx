@@ -5,12 +5,15 @@ import { Metadata } from "next";
 import { fetchNoteById } from "@/lib/api/clientApi";
 
 type PageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { id } = params;
+export async function generateMetadata(
+  { params }: PageProps
+): Promise<Metadata> {
+  const { id } = await params;
   const note = await fetchNoteById(id);
+
   return {
     title: `Note ${note.title}`,
     description: note.content.slice(0, 30),
@@ -32,7 +35,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 const NoteDetails = async ({ params }: PageProps) => {
-  const { id } = params;
+  const { id } = await params;
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({

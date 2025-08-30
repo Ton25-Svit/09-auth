@@ -21,8 +21,7 @@ export type LoginRequest = {
   password: string;
 };
 
-export type EditRequest = {
-  email: string;
+export type UpdateProfileRequest = {
   username: string;
   avatar?: string;
 };
@@ -107,15 +106,9 @@ export const logout = async (): Promise<void> => {
   await nextClient.post("/auth/logout", null, { withCredentials: true });
 };
 
-export const editProfile = async (data: EditRequest): Promise<User> => {
-  const res = await nextClient.patch<User>("/users/me", data, {
-    headers: { "Content-Type": "application/json" },
-    withCredentials: true,
-  });
-  return res.data;
-};
-
-export const updateMe = async (data: { username: string }): Promise<User> => {
+export const updateProfile = async (
+  data: UpdateProfileRequest
+): Promise<User> => {
   const res = await nextClient.patch<User>("/users/me", data, {
     headers: { "Content-Type": "application/json" },
     withCredentials: true,
